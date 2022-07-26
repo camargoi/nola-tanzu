@@ -1,11 +1,15 @@
-apiVersion: v1
-kind: Service
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  name: kubeapps
+  name: kubeapps-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  selector:
-    app: kubeapps
-  ports:
-    - port: 8080
-      targetPort: 8080
-  type: LoadBalancer
+  rules:
+  - host: kubeapps.prod.example.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: kubeapps 
+          servicePort: 80
